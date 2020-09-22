@@ -1,0 +1,45 @@
+{
+  "private": true,
+  "scripts": {
+    "fix": "npm-run-all --continue-on-error fix:*",
+    "fix:eslint": "eslint --fix \"**/*\"",
+    "fix:markdownlint": "markdownlint --fix \"**/*\"",
+    "fix:prettier": "prettier --write \"**/*\"",
+    "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
+    "lint": "npm-run-all --continue-on-error lint:*",
+    "lint:eslint": "eslint \"**/*\" --report-unused-disable-directives",
+    "lint:markdownlint": "markdownlint \"**/*\"",
+    "lint:prettier": "prettier --check \"**/*\"",
+    "lint:tsc": "tsc --project city4people_wiki_bot",
+    "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "run-if-changed",
+      "post-checkout": "run-if-changed",
+      "post-merge": "run-if-changed",
+      "post-rewrite": "run-if-changed"
+    }
+  },
+  "lint-staged": {
+    "**/*": [
+      "eslint --fix",
+      "markdownlint --fix",
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@kachkaev/eslint-config-base": "^0.1.0",
+    "@kachkaev/markdownlint-config": "^0.1.0",
+    "@kachkaev/prettier-config": "^1.0.0",
+    "eslint": "^7.9.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "markdownlint-cli": "^0.23.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.3",
+    "yarn-deduplicate": "^3.0.0"
+  }
+}
