@@ -1,5 +1,8 @@
 {
   "private": true,
+  "workspaces": [
+    "city4people_wiki_bot"
+  ],
   "scripts": {
     "fix": "npm-run-all --continue-on-error fix:*",
     "fix:eslint": "eslint --fix \"**/*\"",

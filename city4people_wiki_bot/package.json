@@ -1,0 +1,13 @@
+{
+  "name": "city4people_wiki_bot",
+  "version": "0.0.0-local",
+  "private": true,
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "envalid": "^6.0.2",
+    "telegraf": "^3.38.0",
+    "ts-node": "^9.0.0"
+  }
+}
