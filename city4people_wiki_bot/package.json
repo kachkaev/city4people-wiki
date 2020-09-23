@@ -3,11 +3,15 @@
   "version": "0.0.0-local",
   "private": true,
   "scripts": {
+    "dev": "ts-node-dev index.ts",
     "start": "ts-node index.ts"
   },
   "dependencies": {
     "envalid": "^6.0.2",
     "telegraf": "^3.38.0",
     "ts-node": "^9.0.0"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.63"
   }
 }
