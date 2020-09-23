@@ -1,31 +1,40 @@
 import * as envalid from "envalid";
 import { Telegraf } from "telegraf";
 
-const { BOT_TOKEN } = envalid.cleanEnv(
+const {
+  TELEGRAM_BOT_TOKEN: botToken,
+  TELEGRAM_BOT_DOMAIN: botDomain,
+} = envalid.cleanEnv(
   process.env,
   {
-    BOT_TOKEN: envalid.str({}),
+    TELEGRAM_BOT_TOKEN: envalid.str({}),
+    TELEGRAM_BOT_DOMAIN: envalid.str({}),
   },
   { strict: true },
 );
 
-const bot = new Telegraf(BOT_TOKEN);
+const bot = new Telegraf(botToken);
 
-const loginMessage =
-  "Зайдите на https://city4people-wiki.ru, нажмите кнопку «Войти через Телеграм», и вы получите сообщение от этого бота.";
+const loginMessage = `Зайдите на https://${botDomain}, нажмите кнопку «Войти через Телеграм», и вы получите сообщение от этого бота.`;
 
 bot.start((ctx) =>
   ctx.reply(
-    "Это бот экспериментальной вики Горпроектов. Он нужен для авторизации на сайте https://city4people-wiki.ru",
+    `Это бот экспериментальной вики Горпроектов. Он нужен для авторизации на сайте https://${botDomain}`,
   ),
 );
 
 bot.help((ctx) =>
-  ctx.reply(`Сам по себе бот ничего не делает. ${loginMessage}`),
+  ctx.reply(`В режиме чата бот ничего полезного не делает. ${loginMessage}`),
 );
 
 bot.on("message", (ctx) => {
   ctx.reply(`Этот бот не умеет переписываться. ${loginMessage}`);
+});
+
+bot.on("connected_website", (ctx) => {
+  ctx.reply("Сайт подключен");
+  // eslint-disable-next-line no-console
+  console.log(ctx);
 });
 
 bot.launch();
