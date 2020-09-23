@@ -24,7 +24,7 @@ jobs:
           registry: docker.pkg.github.com
 
       - name: Push image
-        run:
+        run: |
           export CONTAINER_IMAGE_WITH_TAG=${{ github.repository }}/city4people_wiki_bot:${{ github.event.release.tag_name }}
           docker tag city4people_wiki_bot:local "${CONTAINER_IMAGE_WITH_TAG}"
           docker push "${CONTAINER_IMAGE_WITH_TAG}"
