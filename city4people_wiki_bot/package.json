@@ -3,8 +3,11 @@
   "version": "0.0.0-local",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev index.ts",
-    "start": "ts-node index.ts"
+    "containerize": "npm-run-all containerize:*",
+    "containerize:1-prepare": "cp ../yarn.lock yarn.lock",
+    "containerize:2-build": "docker build --tag city4people_wiki_bot:local . ",
+    "dev": "ts-node-dev src/index.ts",
+    "start": "ts-node src/index.ts"
   },
   "dependencies": {
     "envalid": "^6.0.2",
