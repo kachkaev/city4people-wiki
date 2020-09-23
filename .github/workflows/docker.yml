@@ -9,14 +9,20 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Run containerize script
         run: yarn workspace city4people_wiki_bot containerize
+
       - name: Login to Github Docker Registry
         uses: docker/login-action@v1
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
+
       - name: Push image
         run:
           export CONTAINER_IMAGE_WITH_TAG=${{ github.repository }}/city4people_wiki_bot:${{ github.event.release.tag_name }}
