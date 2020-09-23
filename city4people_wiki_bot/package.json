@@ -6,8 +6,8 @@
     "containerize": "npm-run-all containerize:*",
     "containerize:1-prepare": "cp ../yarn.lock yarn.lock",
     "containerize:2-build": "docker build --tag city4people_wiki_bot:local --shm-size 1G .",
-    "dev": "ts-node-dev src/index.ts",
-    "start": "ts-node src/index.ts"
+    "dev": "ts-node-dev --transpile-only src/index.ts",
+    "start": "ts-node --transpile-only src/index.ts"
   },
   "dependencies": {
     "envalid": "^6.0.2",
