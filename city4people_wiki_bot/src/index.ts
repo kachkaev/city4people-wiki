@@ -15,16 +15,12 @@ const {
 
 const bot = new Telegraf(botToken);
 
-const loginMessage = `Зайдите на https://${botDomain}, нажмите кнопку «Войти через Телеграм», и вы получите сообщение от этого бота.`;
-
-bot.start((ctx) =>
-  ctx.reply(
-    `Это бот экспериментальной вики Горпроектов. Он нужен для авторизации на сайте https://${botDomain}`,
-  ),
-);
+const loginMessage = `Откройте https://${botDomain}, нажмите кнопку «Войти через Телеграм», и вам придёт сообщение от этого бота.`;
 
 bot.help((ctx) =>
-  ctx.reply(`В режиме чата бот ничего полезного не делает. ${loginMessage}`),
+  ctx.reply(
+    `В режиме чата бот ничего полезного не делает. ${loginMessage}\n\nПо техническим вопросам пишите @kachkaev`,
+  ),
 );
 
 bot.on("message", (ctx) => {
