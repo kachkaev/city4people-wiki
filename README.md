@@ -48,3 +48,45 @@ kubectl create secret generic telegram-bot-token \
 
 kubectl apply -f k8s/telegram-bot.yaml
 ```
+
+### Вики-движок
+
+- [README](https://hub.helm.sh/charts/bitnami/mediawiki)
+
+- [values.yaml](https://github.com/bitnami/charts/blob/master/bitnami/mediawiki/values.yaml)
+
+```sh
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+MEDIAWIKI_PASSWORD=??
+MARIADB_ROOTUSER_PASSWORD=??
+
+cat <<EOF >/tmp/values.yaml
+service:
+  type: ClusterIP
+persistence:
+  enabled: false
+allowEmptyPassword: no
+mediawikiEmail: alexander@kachkaev.ru
+mediawikiHost: city4people-wiki.ru
+mediawikiName: Вики Горпроектов
+mediawikiPassword: "${MEDIAWIKI_PASSWORD}"
+mediawikiUser: admin
+mariadb:
+  rootUser:
+    password: "${MARIADB_ROOTUSER_PASSWORD}"
+EOF
+
+## install
+helm install --namespace=city4people-wiki mediawiki bitnami/mediawiki --values /tmp/values.yaml
+
+## upgrade
+helm upgrade mediawiki --namespace=city4people-wiki bitnami/mediawiki --values /tmp/values.yaml
+
+## uninstall
+helm uninstall --namespace=city4people-wiki mediawiki
+```
+
+```sh
+kubectl apply -f k8s/mediawiki-ingress.yaml
+```

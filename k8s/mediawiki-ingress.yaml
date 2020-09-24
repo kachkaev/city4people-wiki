@@ -1,0 +1,32 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-main-alias
+  namespace: city4people-wiki
+spec:
+  redirectRegex:
+    regex: ^https?://www.(.*)
+    replacement: https://${1}
+    permanent: true
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mediawiki-ingress
+  namespace: city4people-wiki
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`www.city4people-wiki.ru`) || Host(`city4people-wiki.ru`)
+      kind: Rule
+      middlewares:
+        - name: city4people-wiki-redirect-to-main-alias@kubernetescrd
+      services:
+        - name: mediawiki
+          port: 80
+  tls:
+    certResolver: letsencrypt
