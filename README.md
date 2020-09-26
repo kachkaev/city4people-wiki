@@ -73,8 +73,14 @@ mediawikiName: Вики Горпроектов
 mediawikiPassword: "${MEDIAWIKI_PASSWORD}"
 mediawikiUser: admin
 mariadb:
+  master:
+    master:
+      persistence:
+        size: 10Gi
   rootUser:
     password: "${MARIADB_ROOTUSER_PASSWORD}"
+persistence:
+  size: 20Gi
 EOF
 
 ## install
@@ -89,4 +95,87 @@ helm uninstall --namespace=city4people-wiki mediawiki
 
 ```sh
 kubectl apply -f k8s/mediawiki-ingress.yaml
+```
+
+### Шаги после создания сервера
+
+1.  `Main page` → `Заглавная страница`
+    - Переименовать страницу
+    - Изменить значение на странице <https://city4people-wiki.ru/wiki/MediaWiki:Mainpage>
+    - Изменить значение на странице <https://city4people-wiki.ru/wiki/MediaWiki:Mainpage-description>
+
+### Заметки
+
+Extensions:
+
+- <https://www.mediawiki.org/wiki/Extension:MobileApp>
+- <https://www.mediawiki.org/wiki/Extension:MobileFrontend>
+
+Default user options: <https://www.mediawiki.org/wiki/Manual:$wgDefaultUserOptions>
+`/opt/bitnami/mediawiki`
+
+```php
+// LocalSettings.php
+$wgLanguageCode = "ru";
+
+// Set timezone to Moscow
+$wgLocaltimezone = "Europe/Moscow";
+date_default_timezone_set( $wgLocaltimezone );
+
+// Allow file uploads
+$wgFileExtensions = array_merge( $wgFileExtensions, [ 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ods', 'odt' ] );
+
+// Do not allow anonymous users to edit pages
+$wgGroupPermissions['*']['edit'] = false;
+
+// Restrict account creation
+$wgGroupPermissions['*']['createaccount'] = false;
+
+// Disable user mailing
+$wgEnableEmail = false;
+$wgEnableUserEmail = false;
+$wgHiddenPrefs[] = 'disablemail';
+
+// Disable some user preferences
+// https://www.mediawiki.org/wiki/Manual:$wgDefaultUserOptions
+$wgHiddenPrefs[] = 'language';
+$wgHiddenPrefs[] = 'realname';
+$wgHiddenPrefs[] = 'fancysig';
+$wgHiddenPrefs[] = 'nickname';
+$wgHiddenPrefs[] = 'skin';
+$wgHiddenPrefs[] = 'date';
+// $wgHiddenPrefs[] = 'password';
+
+// Disable password resets
+$wgPasswordResetRoutes = false;
+$wgInvalidPasswordReset = false;
+
+// https://www.mediawiki.org/wiki/Extension:WikiEditor
+wfLoadExtension( 'WikiEditor' );
+$wgHiddenPrefs[] = 'usebetatoolbar';
+
+
+
+// Logo and favicon
+// 1.35
+// $wgLogos = [
+//  "1x" => "{$wgResourceBasePath}/images/city4people-wiki-logo.png",
+//  "2x" => "{$wgResourceBasePath}/images/city4people-wiki-logo-x2.png",
+// ]
+$wgLogo = "{$wgResourceBasePath}/images/city4people-wiki-logo.png"; //135x135
+$wgFavicon = "{$wgResourceBasePath}/images/city4people-wiki-favicon.png"; // 32x32
+```
+
+<https://city4people-wiki.ru/wiki/MediaWiki:Sitenotice>
+
+```wiki
+<p style="text-align:left">
+🚨🚨🚨<br>
+'''Сайт в процессе настройки и пока ещё не готов к наполнению'''<br>
+🚨🚨🚨
+</p>
+
+<p style="text-align:left">
+Экспериментальная вики [https://city4people.ru Горпроектов] создаётся для координации работы в Пензенском отделении. Если всё получится, область применения расширится до федерального уровня. Вики Горпроектов — частная инициатива. По любым вопросам пишите в телеграм [https://t.me/kachkaev @kachkaev]
+</p>
 ```
