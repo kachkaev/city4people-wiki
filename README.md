@@ -49,6 +49,11 @@ kubectl create secret generic telegram-bot-token \
 kubectl apply -f k8s/telegram-bot.yaml
 ```
 
+```sh
+export TELEGRAM_BOT_TOKEN=??
+node --eval 'console.log(require("crypto").createHash("sha256").update(process.env.TELEGRAM_BOT_TOKEN).digest("hex"));'
+```
+
 ### Вики-движок
 
 - [README](https://hub.helm.sh/charts/bitnami/mediawiki)
@@ -112,15 +117,34 @@ Default user options: <https://www.mediawiki.org/wiki/Manual:$wgDefaultUserOptio
 `/opt/bitnami/mediawiki`
 
 ```php
+// Debugging
+$wgShowDebug = true;
+$wgShowExceptionDetails = true;
+$wgUseFileCache = false;
+$wgUseSquid = false;
+$wgUseCdn = false;
+$wgDebugToolbar = true;
+```
+
+```php
 // LocalSettings.php
 $wgLanguageCode = "ru";
 
 // Set timezone to Moscow
 $wgLocaltimezone = "Europe/Moscow";
-date_default_timezone_set( $wgLocaltimezone );
+date_default_timezone_set($wgLocaltimezone);
 
 // Allow file uploads
-$wgFileExtensions = array_merge( $wgFileExtensions, [ 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ods', 'odt' ] );
+$wgFileExtensions = array_merge($wgFileExtensions, [
+  'doc',
+  'docx',
+  'ods',
+  'odt',
+  'pdf',
+  'xls',
+  'xlsx',
+  "svg",
+]);
 
 // Do not allow anonymous users to edit pages
 $wgGroupPermissions['*']['edit'] = false;
@@ -149,16 +173,23 @@ $wgPasswordResetRoutes = false;
 $wgInvalidPasswordReset = false;
 
 // https://www.mediawiki.org/wiki/Extension:WikiEditor
-wfLoadExtension( 'WikiEditor' );
+wfLoadExtension('WikiEditor');
 $wgHiddenPrefs[] = 'usebetatoolbar';
 
 // Mobile styles https://www.mediawiki.org/wiki/Extension:MobileFrontend
-wfLoadExtension( 'MobileFrontend' );
-wfLoadSkin( 'MinervaNeue' );
+wfLoadExtension('MobileFrontend');
+wfLoadSkin('MinervaNeue');
 $wgMFDefaultSkinClass = 'SkinMinerva';
 $wgMinervaEnableSiteNotice = true;
 $wgMinervaAlwaysShowLanguageButton = false;
 $wgMinervaApplyKnownTemplateHacks = false;
+
+// Auth via Telegram
+wfLoadExtension('PluggableAuth');
+$wgPluggableAuth_EnableLocalLogin = false;
+wfLoadExtension('TelegramAuth');
+$wgTelegramAuth_BotTokenSha256 =
+  "28f30cc7c42894e47eceebc3e74ab76dc69ff639045ea473f5ffaa0c7bb5c959";
 
 // Fancy talk pages (TODO)
 // https://www.mediawiki.org/wiki/Extension:StructuredDiscussions
@@ -204,3 +235,9 @@ List of login extensions: <https://www.mediawiki.org/wiki/Category:Login_extensi
 ## Template debugging
 
 `&uselang=qqx`
+
+```sh
+ssh remote mkdir -p /top/a/b/c/
+
+rsync --archive --delete --stats --human-readable TelegramAuth/ kachkaev--firstvds--city4people-wiki:/var/www/mediawiki-main/mediawiki/extensions/TelegramAuth
+```

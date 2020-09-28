@@ -1,0 +1,12 @@
+{
+  "@metadata": {
+    "authors": ["Kachkaev"]
+  },
+  "TelegramAuth-extensionname": "TelegramAuth",
+  "TelegramAuth-desc": "Extends the PluggableAuth extension to provide authentication using Telegram.",
+  "TelegramAuth-bot-token-sha256-dec": "Your steam developer API key",
+  "TelegramAuth-pluggable-auth-class-desc": "Sets the class that should be used for Pluggable Auth",
+  "TelegramAuth-pluggable-auth-extra-login-fields-desc": "An array of extra fields to be added to the login form at Special:UserLogin",
+  "TelegramAuth-pluggable-auth-button-label-message": "Sign in with Telegram",
+  "TelegramAuth-pluggable-auth-button-label-message-desc": "Sets the button text for Pluggable Auth"
+}

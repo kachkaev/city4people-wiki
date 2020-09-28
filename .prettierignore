@@ -4,6 +4,7 @@ LICENSE
 !*.js
 !*.json
 !*.md
+!*.php
 !*.ts
 !*.tsx
 !*.yaml

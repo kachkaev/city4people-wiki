@@ -1,0 +1,44 @@
+{
+  "name": "TelegramAuth",
+  "version": "1.0",
+  "author": [
+    "[https://www.mediawiki.org/wiki/User:Kachkaev Kachkaev]",
+    "[https://www.mediawiki.org/wiki/User:Banakin900 Banakin]"
+  ],
+  "url": "https://www.mediawiki.org/wiki/Extension:TelegramAuth",
+  "descriptionmsg": "TelegramAuth-desc",
+  "type": "other",
+  "requires": {
+    "MediaWiki": ">= 1.34.0",
+    "extensions": {
+      "PluggableAuth": ">= 5.1"
+    }
+  },
+  "MessagesDirs": {
+    "TelegramAuth": ["i18n"]
+  },
+  "AutoloadClasses": {
+    "Setup": "src/Setup.php",
+    "TelegramAuth": "src/TelegramAuth.php"
+  },
+  "ExtensionFunctions": ["Setup::init"],
+  "config": {
+    "TelegramAuth_BotTokenSha256": {
+      "value": "key",
+      "description": "TelegramAuth-bot-token-sha256-dec"
+    },
+    "PluggableAuth_Class": {
+      "value": "TelegramAuth",
+      "description": "TelegramAuth-pluggable-auth-class-desc"
+    },
+    "PluggableAuth_ButtonLabelMessage": {
+      "value": "TelegramAuth-pluggable-auth-button-label-message",
+      "description": "TelegramAuth-pluggable-auth-button-label-message-desc"
+    }
+  },
+  "ConfigRegistry": {
+    "TelegramAuth": "GlobalVarConfig::newInstance"
+  },
+  "load_composer_autoloader": true,
+  "manifest_version": 2
+}
