@@ -99,17 +99,14 @@ kubectl apply -f k8s/mediawiki-ingress.yaml
 
 ### Шаги после создания сервера
 
-1.  `Main page` → `Заглавная страница`
-    - Переименовать страницу
-    - Изменить значение на странице <https://city4people-wiki.ru/wiki/MediaWiki:Mainpage>
-    - Изменить значение на странице <https://city4people-wiki.ru/wiki/MediaWiki:Mainpage-description>
-
 ### Заметки
 
 Extensions:
 
-- <https://www.mediawiki.org/wiki/Extension:MobileApp>
+- <https://www.mediawiki.org/wiki/Extension:Echo>
 - <https://www.mediawiki.org/wiki/Extension:MobileFrontend>
+- <https://www.mediawiki.org/wiki/Extension:StructuredDiscussions>
+- <https://www.mediawiki.org/wiki/Extension:CirrusSearch>
 
 Default user options: <https://www.mediawiki.org/wiki/Manual:$wgDefaultUserOptions>
 `/opt/bitnami/mediawiki`
@@ -130,6 +127,7 @@ $wgGroupPermissions['*']['edit'] = false;
 
 // Restrict account creation
 $wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['*']['autocreateaccount'] = true;
 
 // Disable user mailing
 $wgEnableEmail = false;
@@ -154,7 +152,19 @@ $wgInvalidPasswordReset = false;
 wfLoadExtension( 'WikiEditor' );
 $wgHiddenPrefs[] = 'usebetatoolbar';
 
+// Mobile styles https://www.mediawiki.org/wiki/Extension:MobileFrontend
+wfLoadExtension( 'MobileFrontend' );
+wfLoadSkin( 'MinervaNeue' );
+$wgMFDefaultSkinClass = 'SkinMinerva';
+$wgMinervaEnableSiteNotice = true;
+$wgMinervaAlwaysShowLanguageButton = false;
+$wgMinervaApplyKnownTemplateHacks = false;
 
+// Fancy talk pages (TODO)
+// https://www.mediawiki.org/wiki/Extension:StructuredDiscussions
+// wfLoadExtension( 'ParserFunctions' );
+// $wgContentHandlerUseDB = true;
+// wfLoadExtension( 'Flow' );
 
 // Logo and favicon
 // 1.35
@@ -165,8 +175,6 @@ $wgHiddenPrefs[] = 'usebetatoolbar';
 $wgLogo = "{$wgResourceBasePath}/images/city4people-wiki-logo.png"; //135x135
 $wgFavicon = "{$wgResourceBasePath}/images/city4people-wiki-favicon.png"; // 32x32
 ```
-
-<https://city4people-wiki.ru/wiki/MediaWiki:Sitenotice>
 
 ```wiki
 <p style="text-align:left">
@@ -179,3 +187,20 @@ $wgFavicon = "{$wgResourceBasePath}/images/city4people-wiki-favicon.png"; // 32x
 Экспериментальная вики [https://city4people.ru Горпроектов] создаётся для координации работы в Пензенском отделении. Если всё получится, область применения расширится до федерального уровня. Вики Горпроектов — частная инициатива. По любым вопросам пишите в телеграм [https://t.me/kachkaev @kachkaev]
 </p>
 ```
+
+## Auth
+
+List of login extensions: <https://www.mediawiki.org/wiki/Category:Login_extensions>
+
+## Other extensions
+
+<https://meta.miraheze.org/wiki/Special:Version>
+
+## Notable Special pages
+
+- Template:Infobox
+- MediaWiki:Sitenotice
+
+## Template debugging
+
+`&uselang=qqx`
