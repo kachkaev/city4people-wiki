@@ -7,6 +7,8 @@ use MediaWiki\Session\SessionManager;
 
 class TelegramAuth extends PluggableAuth
 {
+  const UNDEFINED_LOGIN_FIELD_VALUE = "~~~~~~~~UNDEFINED~~~~~~~~";
+
   public function authenticate(
     &$id,
     &$username,
@@ -18,30 +20,68 @@ class TelegramAuth extends PluggableAuth
     $config = MediaWikiServices::getInstance()
       ->getConfigFactory()
       ->makeConfig('TelegramAuth'); // Get the config
-    $botTokenSha256 = $config->get('TelegramAuth_BotTokenSha256');
+    $botTokenSha256 = hex2bin($config->get('TelegramAuth_BotTokenSha256'));
 
     // AuthManager for managing the session
     $authManager = AuthManager::singleton();
 
-    wfDebugLog('PluggableAuth', 'AAAAA');
-
-    wfDebugLog('TelegramAuth', "Hey" . $botTokenSha256 . PHP_EOL);
-
     try {
-      $request = $authManager->getRequest();
-
-      $sessData = $authManager->getAuthenticationSessionData(
-        PluggableAuthLogin::RETURNTOURL_SESSION_KEY
+      $extraLoginFields = $authManager->getAuthenticationSessionData(
+        PluggableAuthLogin::EXTRALOGINFIELDS_SESSION_KEY
       );
 
+      $telegramId = $extraLoginFields['telegram_id'];
+      $telegramFirstName = $extraLoginFields['telegram_first_name'];
+      $telegramLastName = $extraLoginFields['telegram_last_name'];
+      $telegramUsername = $extraLoginFields['telegram_username'];
+      $telegramPhotoUrl = $extraLoginFields['telegram_photo_url'];
+      $telegramAuthDate = $extraLoginFields['telegram_auth_date'];
+
+      wfDebugLog('TelegramAuth', "dump " . print_r($extraLoginFields, true));
+
+      // Checking telegram hash
+      // https://gist.github.com/anonymous/6516521b1fb3b464534fbc30ea3573c2
+      $dataCheckArray = [];
+      foreach ($extraLoginFields as $key => $value) {
+        if (
+          substr($key, 0, 9) === 'telegram_' &&
+          $key !== 'telegram_hash' &&
+          $value !== self::UNDEFINED_LOGIN_FIELD_VALUE
+        ) {
+          $dataCheckArray[] = substr($key, 9) . '=' . $value;
+        }
+      }
+      sort($dataCheckArray);
+      $dataCheckString = implode("\n", $dataCheckArray);
       wfDebugLog(
         'TelegramAuth',
-        "Sess " . $request->getSession()->getAllowedUserRights()
+        "dataCheckString" . implode('XX', $dataCheckArray)
       );
 
-      $username = 'Telegram_' . substr($botTokenSha256, 0, 20);
-      $realname = "Hello User";
-      $id = 10000042;
+      $hash = hash_hmac('sha256', $dataCheckString, $botTokenSha256);
+      if (strcmp($hash, $extraLoginFields['telegram_hash']) !== 0) {
+        $errorMessage =
+          "Что-то не так с целостностью данных, полученных от Телеграма. Попробуйте обновить страницу и повторить попытку";
+        wfDebugLog(
+          'TelegramAuth',
+          "hashMiss for user $telegramUsername (id $telegramId)"
+        );
+        return false;
+      }
+
+      if (
+        $telegramUsername === self::UNDEFINED_LOGIN_FIELD_VALUE ||
+        strlen($telegramUsername) < 1
+      ) {
+        $errorMessage =
+          "В вашей учётной записи не указано имя пользователя. Пожалуйста, зайдите в настройки Телеграма, создайте для себя имя пользователя, а затем повторите попытку.";
+        return false;
+      }
+
+      $id = $telegramId;
+      $username = $telegramUsername;
+      // $username = 'Telegram:' . $telegramUsername;
+      // $realname = trim($telegramFirstName . ' ' . $telegramLastName);
 
       return true;
     } catch (Exception $e) {
