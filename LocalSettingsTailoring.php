@@ -44,10 +44,19 @@ $wgInvalidPasswordReset = false;
 wfLoadExtension('WikiEditor');
 $wgHiddenPrefs[] = 'usebetatoolbar';
 
+// Allow modules and syntax highlight https://www.mediawiki.org/wiki/Extension:Scribunto
+wfLoadExtension('Scribunto');
+$wgScribuntoDefaultEngine = 'luastandalone';
+wfLoadExtension('SyntaxHighlight_GeSHi');
+wfLoadExtension('TemplateStyles');
+wfLoadExtension('ParserFunctions');
+$wgPFEnableStringFunctions = true;
+$wgUseInstantCommons = true;
+
 // Mobile styles https://www.mediawiki.org/wiki/Extension:MobileFrontend
 wfLoadExtension('MobileFrontend');
 wfLoadSkin('MinervaNeue');
-$wgMFDefaultSkinClass = 'SkinMinerva';
+$wgDefaultMobileSkin = 'minerva';
 $wgMinervaEnableSiteNotice = true;
 
 // Auth via Telegram
@@ -56,6 +65,8 @@ $wgPluggableAuth_EnableLocalLogin = false;
 wfLoadExtension('TelegramAuth');
 $wgTelegramAuth_BotTokenSha256 =
   "28f30cc7c42894e47eceebc3e74ab76dc69ff639045ea473f5ffaa0c7bb5c959";
+$wgTelegramAuth_AutoPopulateGroups = "telegram";
+$wgGroupPermissions['telegram'] = [];
 
 // TMP
 $wgPluggableAuth_EnableLocalLogin = true;
@@ -65,9 +76,12 @@ $wgGroupPermissions['*']['createaccount'] = false;
 $wgGroupPermissions['*']['autocreateaccount'] = true;
 
 // Logo and favicon
-// $wgLogos = [
-// 	"1x" => "{$wgResourceBasePath}/images/city4people-wiki-logo.png",
-// 	"2x" => "{$wgResourceBasePath}/images/city4people-wiki-logo-x2.png",
-// ]
-$wgLogo = "{$wgResourceBasePath}/images/city4people-wiki-logo.png"; //135x135
+$wgLogos = [
+  "1x" => "{$wgResourceBasePath}/images/city4people-wiki-logo.png", //135x135
+  "2x" => "{$wgResourceBasePath}/images/city4people-wiki-logo-2x.png",
+];
 $wgFavicon = "{$wgResourceBasePath}/images/city4people-wiki-favicon.png"; // 32x32
+
+// Performance
+$wgMainCacheType = CACHE_ACCEL;
+$wgCacheDirectory = "$IP/cache";

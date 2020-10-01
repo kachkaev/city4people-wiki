@@ -9,7 +9,28 @@ spec:
     regex: ^https?://www.(.*)
     replacement: https://${1}
     permanent: true
-
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: compress
+  namespace: city4people-wiki
+spec:
+  compress:
+    compress: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: add-security-headers
+  namespace: city4people-wiki
+spec:
+  headers:
+    contentSecurityPolicy: "default-src 'self' 'unsafe-inline' 'unsafe-eval' telegram.org oauth.telegram.org; img-src 'self' *.wikimedia.org data:; frame-ancestors 'none';"
+    sslRedirect: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 31536000
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -25,6 +46,8 @@ spec:
       kind: Rule
       middlewares:
         - name: city4people-wiki-redirect-to-main-alias@kubernetescrd
+        - name: city4people-wiki-compress@kubernetescrd
+        - name: city4people-wiki-add-security-headers@kubernetescrd
       services:
         - name: mediawiki
           port: 80

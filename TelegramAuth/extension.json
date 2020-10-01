@@ -40,7 +40,8 @@
     "TelegramAuth": "GlobalVarConfig::newInstance"
   },
   "Hooks": {
-    "BeforePageDisplay": "Setup::onBeforePageDisplay"
+    "BeforePageDisplay": "Setup::onBeforePageDisplay",
+    "PluggableAuthPopulateGroups": "TelegramAuth::onPluggableAuthPopulateGroups"
   },
   "load_composer_autoloader": true,
   "manifest_version": 2

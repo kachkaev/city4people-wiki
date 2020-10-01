@@ -104,9 +104,78 @@ kubectl apply -f k8s/mediawiki-ingress.yaml
 
 ### Шаги после создания сервера
 
-### Заметки
+### Группа telegram
 
-Extensions:
+<https://www.mediawiki.org/wiki/Manual:User_rights>
+
+<https://city4people-wiki.ru/wiki/MediaWiki:Group-telegram>
+
+```txt
+Пользователи Телеграма
+```
+
+<https://city4people-wiki.ru/wiki/MediaWiki:Group-telegram-member>
+
+```txt
+пользователь Телеграма
+```
+
+<https://city4people-wiki.ru/wiki/MediaWiki:Grouppage-telegram>
+
+```txt
+Пользователи Телеграма
+```
+
+### Extensions
+
+```sh
+EXTENSIONS_DIR=/var/www/mediawiki-main/mediawiki/extensions
+
+## https://www.mediawiki.org/wiki/Extension:MobileFrontend
+mv ${EXTENSIONS_DIR}/MobileFrontend ${EXTENSIONS_DIR}/MobileFrontend.bak
+wget -c https://extdist.wmflabs.org/dist/extensions/MobileFrontend-REL1_35-8d06152.tar.gz -O - | tar -xz -C $EXTENSIONS_DIR
+
+## https://www.mediawiki.org/wiki/Extension:TemplateStyles
+mv ${EXTENSIONS_DIR}/TemplateStyles ${EXTENSIONS_DIR}/TemplateStyles.bak
+wget -c https://extdist.wmflabs.org/dist/extensions/TemplateStyles-REL1_35-7743810.tar.gz -O - | tar -xz -C $EXTENSIONS_DIR
+
+## https://www.mediawiki.org/wiki/Extension:PerformanceInspector
+mv ${EXTENSIONS_DIR}/PerformanceInspector ${EXTENSIONS_DIR}/PerformanceInspector.bak
+wget -c https://extdist.wmflabs.org/dist/extensions/PerformanceInspector-REL1_35-b9ba836.tar.gz -O - | tar -xz -C $EXTENSIONS_DIR
+
+chmod 755 ${EXTENSIONS_DIR}/Scribunto/includes/engines/LuaStandalone/binaries/lua5_1_5_linux_64_generic/lua
+
+# rm -rf ${EXTENSIONS_DIR}/*.bak
+```
+
+```sh
+
+```
+
+### Skins
+
+```sh
+SKINS_DIR=/var/www/mediawiki-main/mediawiki/skins
+
+mv ${SKINS_DIR}/MinervaNeue ${SKINS_DIR}/MinervaNeue.bak
+wget -c https://extdist.wmflabs.org/dist/skins/MinervaNeue-REL1_35-bb52d27.tar.gz -O - | tar -xz -C $SKINS_DIR
+
+# rm -rf ${SKINS_DIR}/*.bak
+```
+
+### Шаблоны
+
+<https://city4people-wiki.ru/wiki/Служебная:Импорт>
+
+Из [русской Википедии](https://ru.wikipedia.org/wiki/Служебная:Экспорт) (префикс интервики — `wikipedia_ru`):
+
+```txt
+MediaWiki:Common.css
+MediaWiki:Mobile.css
+MediaWiki:Minerva.css
+Шаблон:Ambox
+Шаблон:Внимание
+```
 
 - <https://www.mediawiki.org/wiki/Extension:Echo>
 - <https://www.mediawiki.org/wiki/Extension:MobileFrontend>
@@ -133,16 +202,15 @@ $wgEnableParserCache = false;
 $wgCachePages = false;
 ```
 
-```wiki
-<p style="text-align:left">
-🚨🚨🚨<br>
-'''Сайт в процессе настройки и пока ещё не готов к наполнению'''<br>
-🚨🚨🚨
-</p>
+<https://city4people-wiki.ru/wiki/MediaWiki:Sitenotice>
 
-<p style="text-align:left">
+```wiki
+<div style="text-align:left">
+{{Внимание|'''Сайт в процессе настройки и пока ещё не готов к наполнению'''<br/>
+
 Экспериментальная вики [https://city4people.ru Горпроектов] создаётся для координации работы в Пензенском отделении. Если всё получится, область применения расширится до федерального уровня. Вики Горпроектов — частная инициатива. По любым вопросам пишите в телеграм [https://t.me/kachkaev @kachkaev]
-</p>
+}}
+</div>
 ```
 
 ## Auth
