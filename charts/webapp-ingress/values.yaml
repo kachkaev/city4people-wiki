@@ -1,0 +1,9 @@
+# Default values for webapp-ingress.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# serviceName:
+servicePort: 80
+
+# host:
+certResolver: letsencrypt

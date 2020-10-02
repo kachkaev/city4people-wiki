@@ -41,19 +41,19 @@ _**EN:** This repo contains setup instructions for a [MediaWiki](https://www.med
 
 ```sh
 INSTANCE=main
-TELEGRAM_BOT_DOMAIN=city4people-wiki.ru
+INSTANCE_HOST=city4people-wiki.ru
 TELEGRAM_BOT_TOKEN=??
 TELEGRAM_BOT_USERNAME=city4people_wiki_bot
 
 INSTANCE=sandbox
-TELEGRAM_BOT_DOMAIN=sandbox.city4people-wiki.ru
+INSTANCE_HOST=sandbox.city4people-wiki.ru
 TELEGRAM_BOT_TOKEN=??
 TELEGRAM_BOT_USERNAME=sandbox_wiki_bot
 
 IMAGE_TAG=v2020092309
 
 cat <<EOF >/tmp/values.yaml
-botDomain: "${TELEGRAM_BOT_DOMAIN}"
+botDomain: "${INSTANCE_HOST}"
 botToken: "${TELEGRAM_BOT_TOKEN}"
 botUsername: ${TELEGRAM_BOT_USERNAME}
 image:
@@ -123,8 +123,33 @@ helm upgrade mediawiki --namespace=city4people-wiki bitnami/mediawiki --values /
 helm uninstall --namespace=city4people-wiki mediawiki
 ```
 
+#### Ingress
+
 ```sh
-kubectl apply -f k8s/mediawiki-ingress.yaml
+INSTANCE=main
+INSTANCE_HOST=city4people-wiki.ru
+
+INSTANCE=sandbox
+INSTANCE_HOST=sandbox.city4people-wiki.ru
+SERVICE_NAME=mediawiki
+
+cat <<EOF >/tmp/values.yaml
+serviceName: ${SERVICE_NAME}
+host: ${INSTANCE_HOST}
+EOF
+
+## install
+helm install --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./charts/webapp-ingress --values /tmp/values.yaml
+
+## upgrade
+helm upgrade "${INSTANCE}-webapp-ingress" --namespace=city4people-wiki ./charts/webapp-ingress --values /tmp/values.yaml
+
+## uninstall
+helm uninstall --namespace=city4people-wiki "${INSTANCE}-webapp-ingress"
+```
+
+```sh
+kubectl delete -f charts/mediawiki-ingress.yaml
 ```
 
 ### Шаги после создания сервера
@@ -155,6 +180,7 @@ kubectl apply -f k8s/mediawiki-ingress.yaml
 
 ```sh
 ## (on the server)
+MEDIAWIKI_PV_PATH=/var/www/local-pvs/city4people-wiki-main-data
 MEDIAWIKI_PV_PATH=/var/www/mediawiki-main
 EXTENSIONS_DIR=${MEDIAWIKI_PV_PATH}/mediawiki/extensions
 

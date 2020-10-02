@@ -1,0 +1,3 @@
+The wiki webapp should be now available at https://{{ .Values.host }} and a redirect from https://www.{{ .Values.host }} should also work.
+
+It may take a few seconds for the HTTPS certificates to be obtained.

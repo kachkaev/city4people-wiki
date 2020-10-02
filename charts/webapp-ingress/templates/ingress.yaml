@@ -1,9 +1,12 @@
+{{- $fullName := include "webapp-ingress.fullname" . -}}
+{{- $middlewareNameForRedirect := print $fullName "-redirect" -}}
+{{- $middlewareNameForCompress := print $fullName "-compress" -}}
+{{- $middlewareNameForHeaders := print $fullName "-headers" -}}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: redirect-to-main-alias
-  namespace: city4people-wiki
+  name: {{ $middlewareNameForRedirect }}
 spec:
   redirectRegex:
     regex: ^https?://www.(.*)
@@ -13,8 +16,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: compress
-  namespace: city4people-wiki
+  name: {{ $middlewareNameForCompress }}
 spec:
   compress:
     compress: true
@@ -22,8 +24,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: add-security-headers
-  namespace: city4people-wiki
+  name: {{ $middlewareNameForHeaders }}
 spec:
   headers:
     contentSecurityPolicy: "default-src 'self' 'unsafe-inline' 'unsafe-eval' telegram.org oauth.telegram.org; img-src 'self' *.wikimedia.org data:; frame-ancestors 'none';"
@@ -36,20 +37,19 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: mediawiki-ingress
-  namespace: city4people-wiki
 spec:
   entryPoints:
     - web
     - websecure
   routes:
-    - match: Host(`www.city4people-wiki.ru`) || Host(`city4people-wiki.ru`)
+    - match: Host(`{{ .Values.host }}`) || Host(`www.{{ .Values.host }}`)
       kind: Rule
       middlewares:
-        - name: city4people-wiki-redirect-to-main-alias@kubernetescrd
-        - name: city4people-wiki-compress@kubernetescrd
-        - name: city4people-wiki-add-security-headers@kubernetescrd
+        - name: {{ .Release.Namespace }}-{{ $middlewareNameForRedirect }}@kubernetescrd
+        - name: {{ .Release.Namespace }}-{{ $middlewareNameForCompress }}@kubernetescrd
+        - name: {{ .Release.Namespace }}-{{ $middlewareNameForHeaders }}@kubernetescrd
       services:
-        - name: mediawiki
-          port: 80
+        - name: {{ .Values.serviceName }}
+          port: {{ .Values.servicePort }}
   tls:
-    certResolver: letsencrypt
+    certResolver: {{ .Values.certResolver }}
