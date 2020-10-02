@@ -10,7 +10,7 @@ const {
     TELEGRAM_BOT_TOKEN: envalid.str({}),
     TELEGRAM_BOT_DOMAIN: envalid.str({}),
   },
-  { strict: true }
+  { strict: true },
 );
 
 const bot = new Telegraf(botToken);
@@ -19,8 +19,8 @@ const loginMessage = `Откройте https://${botDomain}, нажмите кн
 
 bot.help((ctx) =>
   ctx.reply(
-    `В режиме чата бот ничего полезного не делает. ${loginMessage}\n\nПо техническим вопросам пишите @kachkaev`
-  )
+    `В режиме чата бот ничего полезного не делает. ${loginMessage}\n\nПо техническим вопросам пишите @kachkaev`,
+  ),
 );
 
 bot.on("message", (ctx) => {
