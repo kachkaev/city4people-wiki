@@ -31,8 +31,8 @@ _**EN:** This repo contains setup instructions for a [MediaWiki](https://www.med
     См. <https://stackoverflow.com/a/61912590/1818285>
 
     ```sh
-    GITHUB_USER=??
-    GITHUB_TOKEN=??
+    # GITHUB_USER=
+    # GITHUB_TOKEN=
     
     echo "{\"auths\":{\"docker.pkg.github.com\":{\"auth\":\"$(echo -n ${GITHUB_USER}:${GITHUB_TOKEN} | base64)\"}}}" | kubectl create secret generic dockerconfigjson-github-com --type=kubernetes.io/dockerconfigjson --from-file=.dockerconfigjson=/dev/stdin --namespace=city4people-wiki
     ```
@@ -42,17 +42,17 @@ _**EN:** This repo contains setup instructions for a [MediaWiki](https://www.med
 ```sh
 INSTANCE=main
 INSTANCE_HOST=city4people-wiki.ru
-TELEGRAM_BOT_TOKEN=??
+# TELEGRAM_BOT_TOKEN=
 TELEGRAM_BOT_USERNAME=city4people_wiki_bot
 
 INSTANCE=sandbox
 INSTANCE_HOST=sandbox.city4people-wiki.ru
-TELEGRAM_BOT_TOKEN=??
+# TELEGRAM_BOT_TOKEN=
 TELEGRAM_BOT_USERNAME=sandbox_wiki_bot
 
 IMAGE_TAG=v2020092309
 
-cat <<EOF >/tmp/values.yaml
+cat <<EOF >/tmp/values-for-telegram-bot.yaml
 botDomain: "${INSTANCE_HOST}"
 botToken: "${TELEGRAM_BOT_TOKEN}"
 botUsername: ${TELEGRAM_BOT_USERNAME}
@@ -70,10 +70,10 @@ resources:
 EOF
 
 ## install
-helm install --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./k8s/telegram-bot --values /tmp/values.yaml
+helm install --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./charts/telegram-bot --values /tmp/values-for-telegram-bot.yaml
 
 ## upgrade
-helm upgrade "${INSTANCE}-telegram-bot" --namespace=city4people-wiki ./k8s/telegram-bot --values /tmp/values.yaml
+helm upgrade --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./charts/telegram-bot --values /tmp/values-for-telegram-bot.yaml
 
 ## uninstall
 helm uninstall --namespace=city4people-wiki "${INSTANCE}-telegram-bot"
@@ -88,39 +88,48 @@ helm uninstall --namespace=city4people-wiki "${INSTANCE}-telegram-bot"
 ```sh
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
-MEDIAWIKI_PASSWORD=??
-MARIADB_ROOTUSER_PASSWORD=??
+INSTANCE=main
+INSTANCE_HOST=city4people-wiki.ru
+MEDIAWIKI_NAME="Вики Горпроектов"
+# MEDIAWIKI_PASSWORD=
+# MARIADB_ROOTUSER_PASSWORD=
 
-cat <<EOF >/tmp/values.yaml
+cat <<EOF >/tmp/values-for-webapp.yaml
+# nameOverride: ${INSTANCE}-mediawiki
+image:
+  tag: 1.35.0-debian-10-r8
 service:
   type: ClusterIP
 persistence:
-  enabled: false
+  accessMode: ReadWriteMany
+  enabled: true
+  size: 20Gi
 allowEmptyPassword: no
 mediawikiEmail: alexander@kachkaev.ru
-mediawikiHost: city4people-wiki.ru
-mediawikiName: Вики Горпроектов
+mediawikiHost: ${INSTANCE_HOST}
+mediawikiName: ${MEDIAWIKI_NAME}
 mediawikiPassword: "${MEDIAWIKI_PASSWORD}"
 mediawikiUser: admin
 mariadb:
+  # nameOverride: ${INSTANCE}-mariadb
   master:
-    master:
-      persistence:
-        size: 10Gi
+    persistence:
+      accessModes:
+        - ReadWriteMany
+      enabled: true
+      size: 10Gi
   rootUser:
     password: "${MARIADB_ROOTUSER_PASSWORD}"
-persistence:
-  size: 20Gi
 EOF
 
 ## install
-helm install --namespace=city4people-wiki mediawiki bitnami/mediawiki --values /tmp/values.yaml
+helm install --namespace=city4people-wiki "${INSTANCE}-webapp" bitnami/mediawiki --values /tmp/values-for-webapp.yaml
 
 ## upgrade
-helm upgrade mediawiki --namespace=city4people-wiki bitnami/mediawiki --values /tmp/values.yaml
+helm upgrade --namespace=city4people-wiki "${INSTANCE}-webapp" bitnami/mediawiki --values /tmp/values-for-webapp.yaml
 
 ## uninstall
-helm uninstall --namespace=city4people-wiki mediawiki
+helm uninstall --namespace=city4people-wiki "${INSTANCE}-webapp"
 ```
 
 #### Ingress
@@ -128,28 +137,25 @@ helm uninstall --namespace=city4people-wiki mediawiki
 ```sh
 INSTANCE=main
 INSTANCE_HOST=city4people-wiki.ru
+SERVICE_NAME=main-webapp-mediawiki
 
 INSTANCE=sandbox
 INSTANCE_HOST=sandbox.city4people-wiki.ru
 SERVICE_NAME=mediawiki
 
-cat <<EOF >/tmp/values.yaml
+cat <<EOF >/tmp/values-for-webapp-ingress.yaml
 serviceName: ${SERVICE_NAME}
 host: ${INSTANCE_HOST}
 EOF
 
 ## install
-helm install --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./charts/webapp-ingress --values /tmp/values.yaml
+helm install --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./charts/webapp-ingress --values /tmp/values-for-webapp-ingress.yaml
 
 ## upgrade
-helm upgrade "${INSTANCE}-webapp-ingress" --namespace=city4people-wiki ./charts/webapp-ingress --values /tmp/values.yaml
+helm upgrade --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./charts/webapp-ingress --values /tmp/values-for-webapp-ingress.yaml
 
 ## uninstall
 helm uninstall --namespace=city4people-wiki "${INSTANCE}-webapp-ingress"
-```
-
-```sh
-kubectl delete -f charts/mediawiki-ingress.yaml
 ```
 
 ### Шаги после создания сервера
@@ -180,8 +186,7 @@ kubectl delete -f charts/mediawiki-ingress.yaml
 
 ```sh
 ## (on the server)
-MEDIAWIKI_PV_PATH=/var/www/local-pvs/city4people-wiki-main-data
-MEDIAWIKI_PV_PATH=/var/www/mediawiki-main
+MEDIAWIKI_PV_PATH=/var/www/local-pvs/city4people-wiki-main-mediawiki
 EXTENSIONS_DIR=${MEDIAWIKI_PV_PATH}/mediawiki/extensions
 
 ## https://www.mediawiki.org/wiki/Extension:MobileFrontend
@@ -192,9 +197,8 @@ wget -c https://extdist.wmflabs.org/dist/extensions/MobileFrontend-REL1_35-8d061
 mv ${EXTENSIONS_DIR}/TemplateStyles ${EXTENSIONS_DIR}/TemplateStyles.bak
 wget -c https://extdist.wmflabs.org/dist/extensions/TemplateStyles-REL1_35-7743810.tar.gz -O - | tar -xz -C $EXTENSIONS_DIR
 
-## https://www.mediawiki.org/wiki/Extension:PerformanceInspector
-mv ${EXTENSIONS_DIR}/PerformanceInspector ${EXTENSIONS_DIR}/PerformanceInspector.bak
-wget -c https://extdist.wmflabs.org/dist/extensions/PerformanceInspector-REL1_35-b9ba836.tar.gz -O - | tar -xz -C $EXTENSIONS_DIR
+mv ${EXTENSIONS_DIR}/PluggableAuth ${EXTENSIONS_DIR}/PluggableAuth.bak
+wget -c https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_35-2a465ae.tar.gz -O - | tar -xz -C $EXTENSIONS_DIR
 
 chmod 755 ${EXTENSIONS_DIR}/Scribunto/includes/engines/LuaStandalone/binaries/lua5_1_5_linux_64_generic/lua
 
@@ -204,15 +208,16 @@ chmod 755 ${EXTENSIONS_DIR}/Scribunto/includes/engines/LuaStandalone/binaries/lu
 ##### Настройка плагина для авторизации через телеграм
 
 ```sh
-export TELEGRAM_BOT_TOKEN=??
+# export TELEGRAM_BOT_TOKEN=
 node --eval 'console.log(require("crypto").createHash("sha256").update(process.env.TELEGRAM_BOT_TOKEN).digest("hex"));'
 ```
 
 ### Skins
 
 ```sh
-SKINS_DIR=/var/www/mediawiki-main/mediawiki/skins
+SKINS_DIR=${MEDIAWIKI_PV_PATH}/mediawiki/skins
 
+# https://www.mediawiki.org/wiki/Skin:Minerva_Neue
 mv ${SKINS_DIR}/MinervaNeue ${SKINS_DIR}/MinervaNeue.bak
 wget -c https://extdist.wmflabs.org/dist/skins/MinervaNeue-REL1_35-bb52d27.tar.gz -O - | tar -xz -C $SKINS_DIR
 
@@ -240,23 +245,6 @@ MediaWiki:Minerva.css
 
 Default user options: <https://www.mediawiki.org/wiki/Manual:$wgDefaultUserOptions>
 `/opt/bitnami/mediawiki`
-
-```php
-// Debugging
-error_reporting(-1);
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-
-$wgShowExceptionDetails = true;
-$wgDebugToolbar = true;
-// $wgShowDebug=true;
-$wgDevelopmentWarnings = true;
-$wgDebugDumpSql = true;
-$wgDebugLogFile = dirname(__FILE__) . "/debug.log";
-$wgDebugComments = true;
-$wgEnableParserCache = false;
-$wgCachePages = false;
-```
 
 <https://city4people-wiki.ru/wiki/MediaWiki:Sitenotice>
 
@@ -286,8 +274,14 @@ List of login extensions: <https://www.mediawiki.org/wiki/Category:Login_extensi
 
 `&uselang=qqx`
 
+## Syncing
+
 ```sh
 ssh remote mkdir -p /top/a/b/c/
 
-rsync --archive --delete --stats --human-readable TelegramAuth/ kachkaev--firstvds--city4people-wiki:/var/www/mediawiki-main/mediawiki/extensions/TelegramAuth
+watch rsync --archive --delete --stats --human-readable TelegramAuth/ kachkaev--firstvds--city4people-wiki:${MEDIAWIKI_PV_PATH}/mediawiki/extensions/TelegramAuth
+
+watch rsync --archive --stats --human-readable LocalSettings*.php kachkaev--firstvds--city4people-wiki:${MEDIAWIKI_PV_PATH}/mediawiki/
+
+watch rsync --archive --stats --human-readable visuals/main/mediawiki/*.png kachkaev--firstvds--city4people-wiki:${MEDIAWIKI_PV_PATH}/mediawiki/images/
 ```

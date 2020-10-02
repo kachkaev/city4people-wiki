@@ -1,1 +1,1 @@
-Test if the application works by messaging to https://t.me/{{ .Values.botName }}
+Test if the application works by messaging to https://t.me/{{ .Values.botUsername }}

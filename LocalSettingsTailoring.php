@@ -68,6 +68,10 @@ $wgTelegramAuth_BotTokenSha256 =
 $wgTelegramAuth_AutoPopulateGroups = "telegram";
 $wgGroupPermissions['telegram'] = [];
 
+// Visual Editor
+wfLoadExtension('VisualEditor');
+$wgDefaultUserOptions['visualeditor-enable'] = 1;
+
 // TMP
 $wgPluggableAuth_EnableLocalLogin = true;
 
@@ -77,10 +81,10 @@ $wgGroupPermissions['*']['autocreateaccount'] = true;
 
 // Logo and favicon
 $wgLogos = [
-  "1x" => "{$wgResourceBasePath}/images/city4people-wiki-logo.png", //135x135
-  "2x" => "{$wgResourceBasePath}/images/city4people-wiki-logo-2x.png",
+  "1x" => "{$wgResourceBasePath}/images/logo.png", //135x135
+  "2x" => "{$wgResourceBasePath}/images/logo-2x.png",
 ];
-$wgFavicon = "{$wgResourceBasePath}/images/city4people-wiki-favicon.png"; // 32x32
+$wgFavicon = "{$wgResourceBasePath}/images/favicon.png"; // 32x32
 
 // Performance
 $wgMainCacheType = CACHE_ACCEL;
