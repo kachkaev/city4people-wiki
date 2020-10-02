@@ -205,14 +205,7 @@ chmod 755 ${EXTENSIONS_DIR}/Scribunto/includes/engines/LuaStandalone/binaries/lu
 # rm -rf ${EXTENSIONS_DIR}/*.bak
 ```
 
-##### Настройка плагина для авторизации через телеграм
-
-```sh
-# export TELEGRAM_BOT_TOKEN=
-node --eval 'console.log(require("crypto").createHash("sha256").update(process.env.TELEGRAM_BOT_TOKEN).digest("hex"));'
-```
-
-### Skins
+#### Темы оформления
 
 ```sh
 SKINS_DIR=${MEDIAWIKI_PV_PATH}/mediawiki/skins
@@ -224,7 +217,7 @@ wget -c https://extdist.wmflabs.org/dist/skins/MinervaNeue-REL1_35-bb52d27.tar.g
 # rm -rf ${SKINS_DIR}/*.bak
 ```
 
-### Шаблоны
+#### Шаблоны
 
 <https://city4people-wiki.ru/wiki/Служебная:Импорт>
 
@@ -232,49 +225,22 @@ wget -c https://extdist.wmflabs.org/dist/skins/MinervaNeue-REL1_35-bb52d27.tar.g
 
 ```txt
 MediaWiki:Common.css
-MediaWiki:Mobile.css
 MediaWiki:Minerva.css
+MediaWiki:Mobile.css
 Шаблон:Ambox
 Шаблон:Внимание
 ```
 
-- <https://www.mediawiki.org/wiki/Extension:Echo>
-- <https://www.mediawiki.org/wiki/Extension:MobileFrontend>
-- <https://www.mediawiki.org/wiki/Extension:StructuredDiscussions>
-- <https://www.mediawiki.org/wiki/Extension:CirrusSearch>
+ℹ️ Следует не забыть закомментить стили главной страницы в Mobile.css, чтобы убрать серый фон
 
-Default user options: <https://www.mediawiki.org/wiki/Manual:$wgDefaultUserOptions>
-`/opt/bitnami/mediawiki`
+##### Настройка плагина для авторизации через телеграм
 
-<https://city4people-wiki.ru/wiki/MediaWiki:Sitenotice>
-
-```wiki
-<div style="text-align:left">
-{{Внимание|'''Сайт в процессе настройки и пока ещё не готов к наполнению'''<br/>
-
-Экспериментальная вики [https://city4people.ru Горпроектов] создаётся для координации работы в Пензенском отделении. Если всё получится, область применения расширится до федерального уровня. Вики Горпроектов — частная инициатива. По любым вопросам пишите в телеграм [https://t.me/kachkaev @kachkaev]
-}}
-</div>
+```sh
+# export TELEGRAM_BOT_TOKEN=
+node --eval 'console.log(require("crypto").createHash("sha256").update(process.env.TELEGRAM_BOT_TOKEN).digest("hex"));'
 ```
 
-## Auth
-
-List of login extensions: <https://www.mediawiki.org/wiki/Category:Login_extensions>
-
-## Other extensions
-
-<https://meta.miraheze.org/wiki/Special:Version>
-
-## Notable Special pages
-
-- Template:Infobox
-- MediaWiki:Sitenotice
-
-## Template debugging
-
-`&uselang=qqx`
-
-## Syncing
+#### Синхронизация настроек из этого репозитория
 
 ```sh
 ssh remote mkdir -p /top/a/b/c/
@@ -285,3 +251,48 @@ watch rsync --archive --stats --human-readable LocalSettings*.php kachkaev--firs
 
 watch rsync --archive --stats --human-readable visuals/main/mediawiki/*.png kachkaev--firstvds--city4people-wiki:${MEDIAWIKI_PV_PATH}/mediawiki/images/
 ```
+
+### Хаки для песочницы
+
+`Mediawiki:Common.css`
+
+```css
+/* sandbox hacks */
+
+body {
+  background-color: #ffe599 !important;
+}
+
+#mw-page-base {
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff 50%,
+    #ffe599 100%
+  ) !important;
+}
+
+.vector-menu-tabs li {
+  background-image: linear-gradient(
+    to top,
+    #77c1f6 0,
+    #ffe599 1px,
+    #ffffff 100%
+  ) !important;
+}
+
+.vector-menu-tabs .selected {
+  background: #ffffff !important;
+}
+```
+
+## Заметки по Медиавики
+
+### Важные служебные страницы
+
+- MediaWiki:Sitenotice
+- Special:Version
+- Template:Infobox
+
+### Отладка шаблонов
+
+`&uselang=qqx`

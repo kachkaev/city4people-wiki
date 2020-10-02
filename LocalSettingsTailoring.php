@@ -65,8 +65,8 @@ $wgPluggableAuth_EnableLocalLogin = false;
 wfLoadExtension('TelegramAuth');
 $wgTelegramAuth_BotTokenSha256 =
   "28f30cc7c42894e47eceebc3e74ab76dc69ff639045ea473f5ffaa0c7bb5c959";
-$wgTelegramAuth_AutoPopulateGroups = "telegram";
-$wgGroupPermissions['telegram'] = [];
+$wgTelegramAuth_AutoPopulateGroups = "ssotelegram";
+$wgGroupPermissions['ssotelegram'] = [];
 
 // Visual Editor
 wfLoadExtension('VisualEditor');
