@@ -12,6 +12,9 @@ LICENSE
 
 !/.github/
 
+## Specials
+charts/**/*.yaml
+
 ## same as in .gitignore
 # dependencies
 node_modules

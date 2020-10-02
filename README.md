@@ -40,18 +40,43 @@ _**EN:** This repo contains setup instructions for a [MediaWiki](https://www.med
 ### Телеграм-бот
 
 ```sh
+INSTANCE=main
+TELEGRAM_BOT_DOMAIN=city4people-wiki.ru
 TELEGRAM_BOT_TOKEN=??
+TELEGRAM_BOT_USERNAME=city4people_wiki_bot
 
-kubectl create secret generic telegram-bot-token \
-  --namespace=city4people-wiki \
-  --from-literal=value=${TELEGRAM_BOT_TOKEN}
+INSTANCE=sandbox
+TELEGRAM_BOT_DOMAIN=sandbox.city4people-wiki.ru
+TELEGRAM_BOT_TOKEN=??
+TELEGRAM_BOT_USERNAME=sandbox_wiki_bot
 
-kubectl apply -f k8s/telegram-bot.yaml
-```
+IMAGE_TAG=v2020092309
 
-```sh
-export TELEGRAM_BOT_TOKEN=??
-node --eval 'console.log(require("crypto").createHash("sha256").update(process.env.TELEGRAM_BOT_TOKEN).digest("hex"));'
+cat <<EOF >/tmp/values.yaml
+botDomain: "${TELEGRAM_BOT_DOMAIN}"
+botToken: "${TELEGRAM_BOT_TOKEN}"
+botUsername: ${TELEGRAM_BOT_USERNAME}
+image:
+  tag: ${IMAGE_TAG}
+imagePullSecrets:
+  - name: dockerconfigjson-github-com
+resources:
+  requests:
+    cpu: 10m
+    memory: 100Mi
+  limits:
+    cpu: 1000m
+    memory: 200Mi
+EOF
+
+## install
+helm install --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./k8s/telegram-bot --values /tmp/values.yaml
+
+## upgrade
+helm upgrade "${INSTANCE}-telegram-bot" --namespace=city4people-wiki ./k8s/telegram-bot --values /tmp/values.yaml
+
+## uninstall
+helm uninstall --namespace=city4people-wiki "${INSTANCE}-telegram-bot"
 ```
 
 ### Вики-движок
@@ -104,32 +129,34 @@ kubectl apply -f k8s/mediawiki-ingress.yaml
 
 ### Шаги после создания сервера
 
-### Группа telegram
+#### Группа ssotelegram
 
 <https://www.mediawiki.org/wiki/Manual:User_rights>
 
-<https://city4people-wiki.ru/wiki/MediaWiki:Group-telegram>
+<https://city4people-wiki.ru/wiki/MediaWiki:Group-ssotelegram>
 
 ```txt
 Пользователи Телеграма
 ```
 
-<https://city4people-wiki.ru/wiki/MediaWiki:Group-telegram-member>
+<https://city4people-wiki.ru/wiki/MediaWiki:Group-ssotelegram-member>
 
 ```txt
 пользователь Телеграма
 ```
 
-<https://city4people-wiki.ru/wiki/MediaWiki:Grouppage-telegram>
+<https://city4people-wiki.ru/wiki/MediaWiki:Grouppage-ssotelegram>
 
 ```txt
 Пользователи Телеграма
 ```
 
-### Extensions
+#### Extensions
 
 ```sh
-EXTENSIONS_DIR=/var/www/mediawiki-main/mediawiki/extensions
+## (on the server)
+MEDIAWIKI_PV_PATH=/var/www/mediawiki-main
+EXTENSIONS_DIR=${MEDIAWIKI_PV_PATH}/mediawiki/extensions
 
 ## https://www.mediawiki.org/wiki/Extension:MobileFrontend
 mv ${EXTENSIONS_DIR}/MobileFrontend ${EXTENSIONS_DIR}/MobileFrontend.bak
@@ -148,8 +175,11 @@ chmod 755 ${EXTENSIONS_DIR}/Scribunto/includes/engines/LuaStandalone/binaries/lu
 # rm -rf ${EXTENSIONS_DIR}/*.bak
 ```
 
-```sh
+##### Настройка плагина для авторизации через телеграм
 
+```sh
+export TELEGRAM_BOT_TOKEN=??
+node --eval 'console.log(require("crypto").createHash("sha256").update(process.env.TELEGRAM_BOT_TOKEN).digest("hex"));'
 ```
 
 ### Skins
