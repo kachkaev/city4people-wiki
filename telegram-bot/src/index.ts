@@ -15,7 +15,7 @@ const {
 
 const bot = new Telegraf(botToken);
 
-const loginMessage = `Откройте https://${botDomain} перейдите по ссылке «Войти» и нажмите кнопку «Войти через Телеграм».`;
+const loginMessage = `Откройте https://${botDomain}, перейдите по ссылке «Войти» и нажмите кнопку «Войти через Телеграм».`;
 
 bot.help((ctx) =>
   ctx.reply(

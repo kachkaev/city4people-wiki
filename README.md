@@ -180,7 +180,7 @@ INSTANCE_HOST=sandbox.city4people-wiki.ru
 TELEGRAM_BOT_USERNAME=sandbox_wiki_bot
 # TELEGRAM_BOT_TOKEN=
 
-IMAGE_TAG=v2020092309
+IMAGE_TAG=v2020100301
 
 cat <<EOF >/tmp/values-for-telegram-bot.yaml
 botDomain: "${INSTANCE_HOST}"

@@ -10,7 +10,7 @@ image:
   repository: docker.pkg.github.com/kachkaev/city4people-wiki/telegram-bot
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v2020092309
+  tag: v2020100301
 
 imagePullSecrets: []
 nameOverride: ""
