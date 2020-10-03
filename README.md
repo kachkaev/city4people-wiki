@@ -41,9 +41,9 @@
 
 - [Хелм-чарт для развёртывания Медиавики](https://hub.helm.sh/charts/bitnami/mediawiki) (создан компанией Битнами)
 
-- [Хелм-чарт для настройки внешнего доступа к вики](./charts/webapp-ingress) (в этом репозитории)
+- [Хелм-чарт для настройки внешнего доступа к вики](./helm-charts/webapp-ingress) (в этом репозитории)
 
-- [Исходники телеграм-бота](./telegram-bot), [скрипт для его контейнеризации](./github/workflow/docker.yml) и [хемл-чарт для развёртывания](./charts/webapp-ingress) (в этом репозитории)
+- [Исходники телеграм-бота](./telegram-bot), [скрипт для его контейнеризации](./github/workflow/docker.yml) и [хемл-чарт для развёртывания](./helm-charts/webapp-ingress) (в этом репозитории)
 
   Образ контейнера для телеграм-бота [хранится на Гитхабе](https://github.com/kachkaev/city4people-wiki/packages/410942) и автоматически обновляется при создании нового [релиза](https://github.com/kachkaev/city4people-wiki/releases).
 
@@ -149,10 +149,10 @@ host: ${INSTANCE_HOST}
 EOF
 
 ## install
-helm install --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./charts/webapp-ingress --values /tmp/values-for-webapp-ingress.yaml
+helm install --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./helm-charts/webapp-ingress --values /tmp/values-for-webapp-ingress.yaml
 
 ## upgrade
-helm upgrade --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./charts/webapp-ingress --values /tmp/values-for-webapp-ingress.yaml
+helm upgrade --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./helm-charts/webapp-ingress --values /tmp/values-for-webapp-ingress.yaml
 
 ## uninstall
 # helm uninstall --namespace=city4people-wiki "${INSTANCE}-webapp-ingress"
@@ -200,10 +200,10 @@ resources:
 EOF
 
 ## install
-helm install --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./charts/telegram-bot --values /tmp/values-for-telegram-bot.yaml
+helm install --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./helm-charts/telegram-bot --values /tmp/values-for-telegram-bot.yaml
 
 ## upgrade
-helm upgrade --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./charts/telegram-bot --values /tmp/values-for-telegram-bot.yaml
+helm upgrade --namespace=city4people-wiki "${INSTANCE}-telegram-bot" ./helm-charts/telegram-bot --values /tmp/values-for-telegram-bot.yaml
 
 ## uninstall
 # helm uninstall --namespace=city4people-wiki "${INSTANCE}-telegram-bot"
