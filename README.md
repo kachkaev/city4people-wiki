@@ -188,7 +188,7 @@ helm upgrade --namespace=city4people-wiki "${INSTANCE}-webapp-ingress" ./helm-ch
 ```sh
 INSTANCE=main
 INSTANCE_HOST=city4people-wiki.ru
-TELEGRAM_BOT_USERNAME=telegram-bot
+TELEGRAM_BOT_USERNAME=city4people_wiki_bot
 # TELEGRAM_BOT_TOKEN=
 
 INSTANCE=sandbox
