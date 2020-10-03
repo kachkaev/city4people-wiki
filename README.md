@@ -233,10 +233,10 @@ import "./LocalSettingsDebug.php";
 
 ```sh
 ## модуль для авторизации через Телеграм
-rsync --archive --delete --stats --human-readable TelegramAuth/ ${MEDIAWIKI_PV_SSH_HOST}:${MEDIAWIKI_PV_PATH}/mediawiki/extensions/TelegramAuth
+rsync --archive --delete --stats --human-readable custom-mediawiki-resources/extensions/TelegramAuth/ ${MEDIAWIKI_PV_SSH_HOST}:${MEDIAWIKI_PV_PATH}/mediawiki/extensions/TelegramAuth
 
 ## Донастройка движка (LocalSettingsDebug.php и LocalSettingsTailoring.php)
-rsync --archive --stats --human-readable LocalSettings*.php ${MEDIAWIKI_PV_SSH_HOST}:${MEDIAWIKI_PV_PATH}/mediawiki/
+rsync --archive --stats --human-readable custom-mediawiki-resources/LocalSettings*.php ${MEDIAWIKI_PV_SSH_HOST}:${MEDIAWIKI_PV_PATH}/mediawiki/
 
 ## Логотипы
 rsync --archive --stats --human-readable visuals/main/mediawiki/*.png ${MEDIAWIKI_PV_SSH_HOST}:${MEDIAWIKI_PV_PATH}/mediawiki/images/
@@ -335,7 +335,7 @@ wget -c https://extdist.wmflabs.org/dist/skins/MinervaNeue-REL1_35-bb52d27.tar.g
 #### Настройка плагина для авторизации через Телеграм
 
 Настройки расширения `TelegramAuth` включены в файл `LocalSettingsTailoring.php`.
-Сгенерировать хэш токена можно локально этой командой:
+В случае изменения токена перегенерировать его хэш поможет эта команда:
 
 ```sh
 # export TELEGRAM_BOT_TOKEN=
