@@ -350,20 +350,22 @@ node --eval 'console.log(require("crypto").createHash("sha256").update(process.e
 
 ### Хаки для песочницы
 
-Чтобы песочница визуально отличалась от основной вики, следует добавить следующий код в начало страницы `Mediawiki:Common.css` — фон станет жёлтым.
+Чтобы песочница визуально отличалась от основной вики, следует добавить следующий код в начало двух страниц `Mediawiki:*.css` — фон станет жёлтым.
+
+`Mediawiki:Common.css` (настольный режим)
 
 ```css
-/* sandbox hacks */
+/* begin sandbox hacks */
 
 body {
-  background-color: #ffe599 !important;
+  background-color: #ffeeb2 !important;
 }
 
 #mw-page-base {
   background-image: linear-gradient(
     to bottom,
     #ffffff 50%,
-    #ffe599 100%
+    #ffeeb2 100%
   ) !important;
 }
 
@@ -371,7 +373,7 @@ body {
   background-image: linear-gradient(
     to top,
     #77c1f6 0,
-    #ffe599 1px,
+    #ffeeb2 1px,
     #ffffff 100%
   ) !important;
 }
@@ -379,6 +381,22 @@ body {
 .vector-menu-tabs .selected {
   background: #ffffff !important;
 }
+
+/* end sandbox hacks */
+```
+
+`Mediawiki:Mobile.css` (мобильный режим)
+
+```css
+/* begin sandbox hacks */
+
+#mw-mf-page-center,
+#mw-mf-page-left,
+.header-container.header-chrome {
+  background-color: #ffeeb2 !important;
+}
+
+/* end sandbox hacks */
 ```
 
 ## Заметки по Медиавики

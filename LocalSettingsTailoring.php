@@ -56,7 +56,10 @@ $wgUseInstantCommons = true;
 // Mobile styles https://www.mediawiki.org/wiki/Extension:MobileFrontend
 wfLoadExtension('MobileFrontend');
 wfLoadSkin('MinervaNeue');
+$wgAllowSiteCSSOnRestrictedPages = true;
 $wgDefaultMobileSkin = 'minerva';
+$wgMFCollapseSectionsByDefault = false;
+$wgMFSiteStylesRenderBlocking = true;
 $wgMinervaEnableSiteNotice = true;
 
 // Auth via Telegram
