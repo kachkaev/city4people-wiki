@@ -3,7 +3,7 @@ on:
   release:
     types: [created]
 jobs:
-  containerize_city4people_wiki_bot:
+  containerize_telegram-bot:
     name: Containerize the Telegram Bot
     runs-on: ubuntu-latest
     steps:
@@ -14,7 +14,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run containerize script
-        run: yarn workspace city4people_wiki_bot containerize
+        run: yarn workspace telegram-bot containerize
 
       - name: Login to Github Docker Registry
         uses: docker/login-action@v1
@@ -25,6 +25,6 @@ jobs:
 
       - name: Push image
         run: |
-          export CONTAINER_IMAGE=docker.pkg.github.com/${{ github.repository }}/city4people_wiki_bot:${{ github.event.release.tag_name }}
-          docker tag city4people_wiki_bot:local "${CONTAINER_IMAGE}"
+          export CONTAINER_IMAGE=docker.pkg.github.com/${{ github.repository }}/telegram-bot:${{ github.event.release.tag_name }}
+          docker tag telegram-bot:local "${CONTAINER_IMAGE}"
           docker push "${CONTAINER_IMAGE}"

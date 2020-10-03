@@ -1,11 +1,11 @@
 {
-  "name": "city4people_wiki_bot",
+  "name": "telegram-bot",
   "version": "0.0.0-local",
   "private": true,
   "scripts": {
     "containerize": "npm-run-all containerize:*",
     "containerize:1-prepare": "cp ../yarn.lock yarn.lock",
-    "containerize:2-build": "docker build --tag city4people_wiki_bot:local --shm-size 1G .",
+    "containerize:2-build": "docker build --tag telegram-bot:local --shm-size 1G .",
     "dev": "ts-node-dev --transpile-only src/index.ts",
     "start": "ts-node --transpile-only src/index.ts"
   },

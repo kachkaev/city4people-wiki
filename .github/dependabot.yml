@@ -7,7 +7,7 @@ updates:
       day: "saturday"
 
   - package-ecosystem: "npm"
-    directory: "/city4people_wiki_bot"
+    directory: "/telegram-bot"
     schedule:
       interval: "weekly"
       day: "saturday"

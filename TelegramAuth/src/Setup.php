@@ -96,7 +96,7 @@ const init = () => {
     return;
   }
 
-  loginForm.before('<div class="telegram-container"><scr' + 'ipt async src="https://telegram.org/js/telegram-widget.js?11" data-telegram-login="city4people_wiki_bot" data-lang="ru" data-size="large" data-onauth="onTelegramAuth(user)" data-request-access="write"></' + 'sc' + 'ript></div>');
+  loginForm.before('<div class="telegram-container"><scr' + 'ipt async src="https://telegram.org/js/telegram-widget.js?11" data-telegram-login="telegram-bot" data-lang="ru" data-size="large" data-onauth="onTelegramAuth(user)" data-request-access="write"></' + 'sc' + 'ript></div>');
 
   const formToggleContainer = $('<div class="form-toggle-container"> <span>(для админов)</span></div>')
   const formToggle = $('<a href="#">Вход по логину и паролю</a>').click((e) => {

@@ -1,7 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "city4people_wiki_bot"
+    "telegram-bot"
   ],
   "scripts": {
     "fix": "npm-run-all --continue-on-error fix:*",
@@ -13,7 +13,7 @@
     "lint:eslint": "eslint \"**/*\" --report-unused-disable-directives",
     "lint:markdownlint": "markdownlint \"**/*\"",
     "lint:prettier": "prettier --check \"**/*\"",
-    "lint:tsc": "tsc --project city4people_wiki_bot",
+    "lint:tsc": "tsc --project telegram-bot",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer"
   },
   "husky": {

@@ -7,7 +7,7 @@
 # botUsername:
 
 image:
-  repository: docker.pkg.github.com/kachkaev/city4people-wiki/city4people_wiki_bot
+  repository: docker.pkg.github.com/kachkaev/city4people-wiki/telegram-bot
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: v2020092309
