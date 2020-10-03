@@ -2,7 +2,7 @@
 
 > **EN:** This repo contains setup instructions for a [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) instance that uses [Telegram auth](https://core.telegram.org/widgets/login) for user to login
 
-Вики Горпроектов работает на [Медиавики](https://mediawiki.org) — том же движке, что и Википедия.
+[Вики Горпроектов](https://city4people-wiki.ru) работает на [Медиавики](https://mediawiki.org) — том же движке, что и Википедия.
 Этот выбор определяет низкий порог входа для участников, а также задаёт понятные и проверенные правила для взаимодействия в сообществе.
 
 Все технические компоненты вики имеют свободную лицензию и не требуют оплаты.
