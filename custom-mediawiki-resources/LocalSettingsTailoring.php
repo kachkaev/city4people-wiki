@@ -92,3 +92,6 @@ $wgFavicon = "{$wgResourceBasePath}/images/favicon.png"; // 32x32
 // Performance
 $wgMainCacheType = CACHE_ACCEL;
 $wgCacheDirectory = "$IP/cache";
+
+// Indication of breadcrumbs for subpages https://www.mediawiki.org/wiki/Help:Subpages
+$wgNamespacesWithSubpages[NS_MAIN] = true;
