@@ -41,3 +41,18 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "webapp-ingress.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "webapp-ingress.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Deployment and service name for extra files
+*/}}
+{{- define "webapp-ingress.extrafiles" -}}
+{{ include "webapp-ingress.fullname" . }}-extrafiles
+{{- end }}

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webapp-ingress.extrafiles" . }}
+  labels:
+    {{- include "webapp-ingress.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "webapp-ingress.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "webapp-ingress.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+        - name: files
+          configMap:
+            name: {{ include "webapp-ingress.extrafiles" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "nginx:alpine"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ (index .Values.extraFiles 0).path }}
+              port: http
+          readinessProbe:
+            httpGet:
+              path: {{ (index .Values.extraFiles 0).path }}
+              port: http
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              cpu: 1000m
+              memory: 200Mi
+          volumeMounts:
+            - name: files
+              mountPath: /usr/share/nginx/html

@@ -152,16 +152,26 @@ helm upgrade --namespace=city4people-wiki "${INSTANCE}-webapp" bitnami/mediawiki
 
 ```sh
 INSTANCE=main
-INSTANCE_HOST=city4people-wiki.ru
-SERVICE_NAME=main-webapp-mediawiki
+cat <<EOF >/tmp/values-for-webapp-ingress.yaml
+host: city4people-wiki.ru
+serviceName: main-webapp-mediawiki
+extraFiles:
+  - path: robots.txt
+    content: |-
+      User-agent: *
+      Allow: /
+      Disallow: /*?*mobileaction=
+EOF
 
 INSTANCE=sandbox
-INSTANCE_HOST=sandbox.city4people-wiki.ru
-SERVICE_NAME=mediawiki
-
 cat <<EOF >/tmp/values-for-webapp-ingress.yaml
-serviceName: ${SERVICE_NAME}
-host: ${INSTANCE_HOST}
+host: sandbox.city4people-wiki.ru
+serviceName: mediawiki
+extraFiles:
+  - path: robots.txt
+    content: |-
+      User-agent: *
+      Disallow: /
 EOF
 
 ## install

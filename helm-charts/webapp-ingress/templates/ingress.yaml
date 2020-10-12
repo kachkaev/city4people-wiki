@@ -51,5 +51,14 @@ spec:
       services:
         - name: {{ .Values.serviceName }}
           port: {{ .Values.servicePort }}
+    - match: (Host(`{{ .Values.host }}`) || Host(`www.{{ .Values.host }}`)) && Path(`/{{ (index .Values.extraFiles 0).path }}`)
+      kind: Rule
+      middlewares:
+        - name: {{ .Release.Namespace }}-{{ $middlewareNameForRedirect }}@kubernetescrd
+        - name: {{ .Release.Namespace }}-{{ $middlewareNameForCompress }}@kubernetescrd
+        - name: {{ .Release.Namespace }}-{{ $middlewareNameForHeaders }}@kubernetescrd
+      services:
+        - name: {{ include "webapp-ingress.extrafiles" . }}
+          port: 80
   tls:
     certResolver: {{ .Values.certResolver }}

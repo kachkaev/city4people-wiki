@@ -7,3 +7,9 @@ servicePort: 80
 
 # host:
 certResolver: letsencrypt
+
+extraFiles: []
+# - path: robots.txt
+#   content: |-
+#     User-agent: *
+#     Allow: /
