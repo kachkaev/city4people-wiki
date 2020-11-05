@@ -34,17 +34,17 @@
   },
   "devDependencies": {
     "@hkdobrev/run-if-changed": "^0.3.1",
-    "@kachkaev/eslint-config-base": "^0.1.0",
-    "@kachkaev/markdownlint-config": "^0.1.0",
-    "@kachkaev/prettier-config": "^1.0.0",
-    "@prettier/plugin-php": "^0.15.0",
-    "eslint": "^7.11.0",
+    "@kachkaev/eslint-config-base": "^0.2.2",
+    "@kachkaev/markdownlint-config": "^0.2.0",
+    "@kachkaev/prettier-config": "^1.2.0",
+    "@prettier/plugin-php": "^0.15.2",
+    "eslint": "^7.12.1",
     "husky": "^4.3.0",
-    "lint-staged": "^10.4.1",
-    "markdownlint-cli": "^0.23.2",
+    "lint-staged": "^10.5.1",
+    "markdownlint-cli": "^0.24.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
-    "typescript": "^4.0.3",
-    "yarn-deduplicate": "^3.0.0"
+    "typescript": "^4.0.5",
+    "yarn-deduplicate": "^3.1.0"
   }
 }
