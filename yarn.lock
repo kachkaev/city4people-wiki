@@ -3176,10 +3176,10 @@ table@^6.0.4:
     slice-ansi "^4.0.0"
     string-width "^4.2.0"
 
-telegraf@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.2.1.tgz#0346ecacef3308450b03b8ef2a2c0afcd9339f6d"
-  integrity sha512-tSww8MY+XmT2K3Kq0Y7drGjpl36AQQEg0WWBUByfFcbG6ChiIgOFycPMkB+g5jSL+RqaP7QA4EybAztmI1227g==
+telegraf@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.4.0.tgz#a84228664a252062036b328fc364b5662ba3d22d"
+  integrity sha512-DjVVEz37/5Hp0n8eLhAVjErwoyrWsqLyFAoRj8sU5XiD2CVAbBOx9J6a7cLn/B46pPgDqgbrdjiOeK0fQMiLOA==
   dependencies:
     abort-controller "^3.0.0"
     debug "^4.3.1"
@@ -3189,7 +3189,7 @@ telegraf@^4.2.1:
     p-timeout "^4.1.0"
     safe-compare "^1.1.4"
     sandwich-stream "^2.0.2"
-    typegram "^3.2.0"
+    typegram "^3.4.0"
 
 text-table@^0.2.0:
   version "0.2.0"
@@ -3326,10 +3326,10 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typegram@^3.2.0:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/typegram/-/typegram-3.2.2.tgz#e6da8b5f17d34271e132c6e4fe1b3c28c7981462"
-  integrity sha512-PC7MclSZcLnCEnflubX61/YEwZph98EHbCsrL9tFhU5bZYz3uXm3Mc6iseKjiS3VyKOCCyoT3A4ZDtPkoYyucg==
+typegram@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/typegram/-/typegram-3.4.0.tgz#ab3a7b4219d9d7d7210eb2e39759a242927e8035"
+  integrity sha512-GUE1LV3LJruTThJaUBUvTnaEpTswFhuxhEx9LaVLIA6WRw9CdPQmb87OIA0rCvoMSPBC8gZiHrrPqX9VJGDXwQ==
 
 typescript@^4.2.3:
   version "4.2.3"
