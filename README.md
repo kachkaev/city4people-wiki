@@ -9,7 +9,11 @@
 &nbsp;
 
 <!-- markdownlint-disable-next-line -->
-<center><img width="150" src="./visuals/main/mediawiki/logo-2x.png"></center>
+<p align="center"><img width="150" src="./visuals/main/mediawiki/logo-2x.png"></p>
+
+&nbsp;  
+&nbsp;  
+&nbsp;
 
 ## Статус проекта
 
