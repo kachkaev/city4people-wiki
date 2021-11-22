@@ -9,7 +9,7 @@
 &nbsp;
 
 <!-- markdownlint-disable-next-line -->
-<p align="center"><img width="150" src="./visuals/main/mediawiki/logo-2x.png"></p>
+<p align="center"><img width="180" src="./visuals/main/mediawiki/logo-2x.png"></p>
 
 &nbsp;  
 &nbsp;  
@@ -474,3 +474,19 @@ body {
 ### Отладка шаблонов
 
 `&uselang=qqx`
+
+<!--
+
+## TODO
+### шаблоны
+
+stub
+уточнить
+infobox
+
+### TODO
+
+robots.txt
+social preview
+
+-->
